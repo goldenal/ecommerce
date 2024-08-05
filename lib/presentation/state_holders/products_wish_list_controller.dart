@@ -1,7 +1,8 @@
-import 'package:commerce/data/models/network_response.dart';
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:commerce/data/models/product/productModel.dart';
 import 'package:commerce/data/models/products_model.dart';
-import 'package:commerce/data/services/network_caller.dart';
-import 'package:commerce/data/utils/url_links.dart';
 import 'package:get/get.dart';
 
 class ProductsWishListController extends GetxController {
@@ -14,21 +15,30 @@ class ProductsWishListController extends GetxController {
   ProductModel get productModel => _productModel;
 
   String get message => _message;
+  final db = FirebaseFirestore.instance;
+  List<NewProduct> wishlistproducts = [];
 
-  Future<bool> getWishList() async {
+  getWishList() async {
     _getWishListInProgress = true;
     update();
-    final NetworkResponse response =
-        await NetworkCaller.getRequest(Urls.productWishList);
-    _getWishListInProgress = false;
-    if (response.isSuccess && response.statusCode == 200) {
-      _productModel = ProductModel.fromJson(response.responseJson ?? {});
-      update();
-      return true;
-    } else {
-      _message = 'wish list products get failed';
-      update();
-      return false;
-    }
+    db.collection("wishlist").get().then(
+      (querySnapshot) {
+        List<NewProduct> temp = [];
+        for (var docSnapshot in querySnapshot.docs) {
+          temp.add(NewProduct.fromJson(docSnapshot.data()["productData"]));
+          log('${docSnapshot.id} => ${docSnapshot.data()}');
+        }
+        wishlistproducts = temp;
+        _getWishListInProgress = false;
+        update();
+        return true;
+      },
+      onError: (e) {
+        _getWishListInProgress = false;
+        update();
+        print("Error completing: $e");
+        return false;
+      },
+    );
   }
 }

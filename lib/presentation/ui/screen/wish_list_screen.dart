@@ -28,7 +28,7 @@ class _WishListScreenState extends State<WishListScreen> {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: GridView.builder(
-            itemCount: controller.productModel.data?.length ?? 0,
+            itemCount: controller.wishlistproducts.length ?? 0,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
               crossAxisSpacing: 8,
@@ -38,7 +38,7 @@ class _WishListScreenState extends State<WishListScreen> {
             itemBuilder: (context, int index) {
               return FittedBox(
                 child: ProductsCard(
-                  product: controller.productModel.data![index],
+                  product: controller.wishlistproducts![index],
                   isShowDeleteButton: true,
                 ),
               );

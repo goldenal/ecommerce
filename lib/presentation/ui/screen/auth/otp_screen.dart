@@ -197,7 +197,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     onPressed: () {
                       if (wait) {
                         emailVerificationController
-                            .verifyEmail(widget.email.trim());
+                            .signUp(widget.email.trim(),"");
                         OTPVerifyLoginController().setProfile();
                         if (mounted) {
                           setState(() {

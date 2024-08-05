@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:commerce/data/models/product/productModel.dart';
 import 'package:commerce/data/models/products_details.dart';
 import 'package:commerce/presentation/state_holders/add_to_cart_controller.dart';
 import 'package:commerce/presentation/state_holders/create_wish_list.dart';
@@ -10,15 +11,13 @@ import 'package:commerce/presentation/ui/widgets/custom_app_bar.dart';
 import 'package:commerce/presentation/ui/widgets/custom_stepper.dart';
 import 'package:commerce/presentation/ui/widgets/love_icon_button.dart';
 import 'package:commerce/presentation/ui/widgets/products_carousel_slider.dart';
-import 'package:commerce/presentation/ui/widgets/products_details_screen_widgets/products_details_color_selector.dart';
-import 'package:commerce/presentation/ui/widgets/products_details_screen_widgets/products_details_size_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ProductsDetailsScreen extends StatefulWidget {
-  final int productsId;
+  final NewProduct product;
 
-  const ProductsDetailsScreen({super.key, required this.productsId});
+  const ProductsDetailsScreen({super.key, required this.product});
 
   @override
   State<ProductsDetailsScreen> createState() => _ProductsDetailsScreenState();
@@ -30,8 +29,8 @@ class _ProductsDetailsScreenState extends State<ProductsDetailsScreen> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Get.find<ProductsDetailsController>()
-          .getProductsDetails(widget.productsId);
+      // Get.find<ProductsDetailsController>()
+      //     .getProductsDetails(widget.productsId);
       Get.find<ProductsDetailsController>().availableColor.clear();
     });
   }
@@ -54,12 +53,7 @@ class _ProductsDetailsScreenState extends State<ProductsDetailsScreen> {
           return Column(
             children: [
               ProductsDetailsCarouselSlider(
-                imageList: [
-                  productsDetailsController.productsDetails.img1 ?? "",
-                  productsDetailsController.productsDetails.img2 ?? "",
-                  productsDetailsController.productsDetails.img3 ?? "",
-                  productsDetailsController.productsDetails.img4 ?? "",
-                ],
+                imageList: widget.product.images!,
               ),
               Expanded(
                 child: Padding(
@@ -91,7 +85,7 @@ class _ProductsDetailsScreenState extends State<ProductsDetailsScreen> {
           children: [
             Expanded(
               child: Text(
-                productsDetails.product?.title ?? "",
+                widget.product.name ?? "",
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
@@ -117,7 +111,7 @@ class _ProductsDetailsScreenState extends State<ProductsDetailsScreen> {
               color: Colors.amber,
             ),
             Text(
-              '${productsDetails.product?.star ?? ""}',
+              '${widget.product.ratings?.average}',
               style: const TextStyle(
                 fontSize: 15,
                 overflow: TextOverflow.ellipsis,
@@ -144,44 +138,45 @@ class _ProductsDetailsScreenState extends State<ProductsDetailsScreen> {
             InkWell(
               onTap: () {
                 Get.find<CreateWishListController>()
-                    .createWishList(productsDetails.productId!);
+                    .createWishList(widget.product.id ?? "", widget.product);
               },
               child: const FavoriteLoveIconButton(),
             ),
           ],
         ),
-        const Text(
-          "Color",
-          style: TextStyle(
-              fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 1),
-        ),
+        // const Text(
+        //   "Color",
+        //   style: TextStyle(
+        //       fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 1),
+        // ),
+        // const SizedBox(
+        //   height: 16,
+        // ),
+        // ProductsDetailsColorSelector(
+        //     colors: colors,
+        //     selectedColor: _selectedColorIndex,
+        //     onSelected: (int index) {
+        //       _selectedColorIndex = index;
+        //     }),
+
         const SizedBox(
           height: 16,
         ),
-        ProductsDetailsColorSelector(
-            colors: colors,
-            selectedColor: _selectedColorIndex,
-            onSelected: (int index) {
-              _selectedColorIndex = index;
-            }),
-        const SizedBox(
-          height: 16,
-        ),
-        const Text(
-          "Sizes",
-          style: TextStyle(
-              fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 1),
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        ProductsDetailsSizeSelector(
-          sizes: productsDetails.size?.split(',') ?? [],
-          onSelect: (int index) {
-            _selectedSizeIndex = index;
-          },
-          initialSelected: 0,
-        ),
+        // const Text(
+        //   "Sizes",
+        //   style: TextStyle(
+        //       fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 1),
+        // ),
+        // const SizedBox(
+        //   height: 16,
+        // ),
+        // ProductsDetailsSizeSelector(
+        //   sizes: productsDetails.size?.split(',') ?? [],
+        //   onSelect: (int index) {
+        //     _selectedSizeIndex = index;
+        //   },
+        //   initialSelected: 0,
+        // ),
         const SizedBox(
           height: 16,
         ),
@@ -191,7 +186,7 @@ class _ProductsDetailsScreenState extends State<ProductsDetailsScreen> {
               fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 1),
         ),
         Text(
-          productsDetails.des ?? "",
+          widget.product.description ?? "",
           textAlign: TextAlign.justify,
         ),
       ],
@@ -238,7 +233,7 @@ class _ProductsDetailsScreenState extends State<ProductsDetailsScreen> {
       ProductsDetails productsDetails, List<String> color, List<String> size) {
     return Container(
       clipBehavior: Clip.hardEdge,
-      height: 88,
+      height: 90,
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.only(
@@ -261,10 +256,10 @@ class _ProductsDetailsScreenState extends State<ProductsDetailsScreen> {
                   style: TextStyle(fontSize: 16),
                 ),
                 const SizedBox(
-                  height: 5,
+                  height: 4,
                 ),
                 Text(
-                  '${productsDetails.product?.price ?? 0}',
+                  'N${widget.product.price ?? 0}',
                   style: const TextStyle(
                       fontSize: 18,
                       color: AppColor.primaryColor,
@@ -289,9 +284,8 @@ class _ProductsDetailsScreenState extends State<ProductsDetailsScreen> {
                           size[_selectedSizeIndex].toString());
 
                       if (results) {
-                        Get.snackbar("Success", "Add to cart success");
-                        log(color[_selectedColorIndex]);
-                        log(size[_selectedSizeIndex]);
+                        Get.snackbar("Success", "Added to cart ");
+                      
                       }
                       //else if (AuthController.accessToken!.isEmpty) {
                       //   Get.defaultDialog(

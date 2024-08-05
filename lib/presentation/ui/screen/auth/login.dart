@@ -1,17 +1,18 @@
 import 'package:commerce/presentation/state_holders/authentication_controller/email_verification_controller.dart';
 import 'package:commerce/presentation/ui/screen/auth/complete_profile_screen.dart';
+import 'package:commerce/presentation/ui/screen/auth/email_verification_screen.dart';
+import 'package:commerce/presentation/ui/screen/main_bottom_nav_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class EmailVerificationScreen extends StatefulWidget {
-  const EmailVerificationScreen({super.key});
+class Login extends StatefulWidget {
+  const Login({super.key});
 
   @override
-  State<EmailVerificationScreen> createState() =>
-      _EmailVerificationScreenState();
+  State<Login> createState() => _LoginState();
 }
 
-class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
+class _LoginState extends State<Login> {
   final TextEditingController _emailTEController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -38,7 +39,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                     height: 12,
                   ),
                   Text(
-                    "Welcome ",
+                    "Welcome Back",
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge
@@ -48,7 +49,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                     height: 4,
                   ),
                   Text(
-                    "Please Enter your Email address and Password to Register",
+                    "Please Enter your Email address",
                     style: Theme.of(context)
                         .textTheme
                         .titleMedium
@@ -99,10 +100,10 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                       return ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            verifyEmail(emailController);
+                            login(emailController);
                           }
                         },
-                        child: const Text("NEXT"),
+                        child: const Text("LOGIN"),
                       );
                     }),
                   ),
@@ -112,9 +113,9 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
 
                   GestureDetector(
                       onTap: () {
-                        Navigator.pop(context);
+                        Get.to(const EmailVerificationScreen());
                       },
-                      child: const Text("Have an account already? Sign In."))
+                      child: const Text("Dont have an account? Register."))
                 ],
               ),
             ),
@@ -124,11 +125,11 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
     );
   }
 
-  Future<void> verifyEmail(EmailVerificationController controller) async {
-    final response = await controller.signUp(
+  Future<void> login(EmailVerificationController controller) async {
+    final response = await controller.login(
         _emailTEController.text.trim(), _passwordController.text);
     if (response) {
-      Get.offAll(() => const CompleteProfileScreen());
+      Get.offAll(() => const BottomNavBarScreen());
     } else {
       // Get.snackbar(
       //     "error", "Email verification has been failed! please try again");

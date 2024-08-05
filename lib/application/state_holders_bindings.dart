@@ -1,12 +1,12 @@
 import 'package:commerce/presentation/state_holders/add_to_cart_controller.dart';
+import 'package:commerce/presentation/state_holders/authentication_controller/complete_profile_controller.dart';
+import 'package:commerce/presentation/state_holders/authentication_controller/email_verification_controller.dart';
 import 'package:commerce/presentation/state_holders/authentication_controller/verify_login_controller.dart';
 import 'package:commerce/presentation/state_holders/cart_list_controller.dart';
 import 'package:commerce/presentation/state_holders/categories_controller.dart';
-import 'package:commerce/presentation/state_holders/authentication_controller/complete_profile_controller.dart';
 import 'package:commerce/presentation/state_holders/create_review_controller.dart';
 import 'package:commerce/presentation/state_holders/create_wish_list.dart';
 import 'package:commerce/presentation/state_holders/delete_cart_list.dart';
-import 'package:commerce/presentation/state_holders/authentication_controller/email_verification_controller.dart';
 import 'package:commerce/presentation/state_holders/home_screen_slider_controller.dart';
 import 'package:commerce/presentation/state_holders/main_bottom_nav_controller.dart';
 import 'package:commerce/presentation/state_holders/new_products_controller.dart';
@@ -25,6 +25,7 @@ class StateHoldersBindings extends Bindings {
     Get.put(EmailVerificationController());
     Get.put(OTPVerifyLoginController());
     Get.put(HomeScreenSliderController());
+
     Get.put(CategoriesController());
     Get.put(PopularProductsController());
     Get.put(NewProductsController());

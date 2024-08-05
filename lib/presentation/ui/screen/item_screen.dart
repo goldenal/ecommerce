@@ -31,10 +31,10 @@ class _ItemsScreenState extends State<ItemsScreen> {
           ),
           itemBuilder: (context, int index) {
             return FittedBox(
-              child: ProductsCard(
-                product: widget.products.data![index],
-                isShowDeleteButton: false,
-              ),
+              // child: ProductsCard(
+              //   product: widget.products.data![index],
+              //   isShowDeleteButton: false,
+              // ),
             );
           },
         ),

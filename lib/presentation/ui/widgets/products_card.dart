@@ -1,4 +1,4 @@
-import 'package:commerce/data/models/products.dart';
+import 'package:commerce/data/models/product/productModel.dart';
 import 'package:commerce/presentation/state_holders/create_wish_list.dart';
 import 'package:commerce/presentation/ui/screen/products_details_screen.dart';
 import 'package:commerce/presentation/ui/utils/app_color.dart';
@@ -12,14 +12,14 @@ class ProductsCard extends StatelessWidget {
     required this.isShowDeleteButton,
   });
 
-  final Product product;
+  final NewProduct product;
   final bool isShowDeleteButton;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.to(() => ProductsDetailsScreen(productsId: product.id!));
+        Get.to(() => ProductsDetailsScreen(product: product));
       },
       child: Card(
         elevation: 5,
@@ -32,7 +32,7 @@ class ProductsCard extends StatelessWidget {
           child: Column(
             children: [
               Container(
-                height: 120,
+                height: 110,
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(8),
@@ -40,11 +40,19 @@ class ProductsCard extends StatelessWidget {
                   color: AppColor.primaryColor.withOpacity(0.2),
                   image: DecorationImage(
                     image: NetworkImage(
-                      product.image ??
+                      product.images![0] ??
                           'https://assets.adidas.com/images/w_600,f_auto,q_auto/f9d52817f7524d3fb442af3b01717dfa_9366/Runfalcon_3.0_Shoes_Black_HQ3790_01_standard.jpg',
                     ),
                   ),
                 ),
+                // child: CachedNetworkImage(
+                //   imageUrl: product.images![0],
+                //   placeholder: (context, url) => const SizedBox(
+                //       height: 10,
+                //       width: 10,
+                //       child: CircularProgressIndicator()),
+                //   errorWidget: (context, url, error) => const Icon(Icons.error),
+                // ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -52,7 +60,7 @@ class ProductsCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      product.title ?? "New year sell Shoe",
+                      product.name ?? "New year sell Shoe",
                       maxLines: 1,
                       style: const TextStyle(
                           overflow: TextOverflow.ellipsis,
@@ -79,7 +87,7 @@ class ProductsCard extends StatelessWidget {
                               color: Colors.amber,
                             ),
                             Text(
-                              "${product.star ?? 4.0}",
+                              "${product.ratings?.average}",
                               style: TextStyle(
                                 overflow: TextOverflow.ellipsis,
                                 fontSize: 13,
@@ -107,7 +115,7 @@ class ProductsCard extends StatelessWidget {
                           onTap: () {
                             isShowDeleteButton == false
                                 ? Get.find<CreateWishListController>()
-                                    .createWishList(product.id!)
+                                    .createWishList(product.id!, product)
                                 : null;
                           },
                         )

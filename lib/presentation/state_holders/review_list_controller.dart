@@ -14,6 +14,19 @@ class ReviewListController extends GetxController {
   String get message => _message;
 
   Future<bool> getReview(int id) async {
+
+  //     db.collection("products").get().then(
+  //     (querySnapshot) {
+  //       List<NewProduct> temp = [];
+  //       for (var docSnapshot in querySnapshot.docs) {
+  //         temp.add(NewProduct.fromJson(docSnapshot.data()));
+  //         log('${docSnapshot.id} => ${docSnapshot.data()}');
+  //       }
+  //       products = temp;
+  //     },
+  //     onError: (e) => print("Error completing: $e"),
+  //   );
+  // }
     _getReviewInProgress = true;
     update();
     final NetworkResponse response =

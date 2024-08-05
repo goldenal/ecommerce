@@ -1,12 +1,12 @@
 import 'package:commerce/presentation/state_holders/categories_controller.dart';
 import 'package:commerce/presentation/state_holders/home_screen_slider_controller.dart';
+import 'package:commerce/presentation/state_holders/homecontroller.dart';
 import 'package:commerce/presentation/state_holders/main_bottom_nav_controller.dart';
-import 'package:commerce/presentation/state_holders/new_products_controller.dart';
 import 'package:commerce/presentation/state_holders/popular_products_controller.dart';
 import 'package:commerce/presentation/state_holders/spacial_products_controller.dart';
-import 'package:commerce/presentation/ui/screen/auth/email_verification_screen.dart';
+import 'package:commerce/presentation/ui/screen/auth/login.dart';
 import 'package:commerce/presentation/ui/screen/item_screen.dart';
-import 'package:commerce/presentation/ui/utils/images_utils.dart';
+import 'package:commerce/presentation/ui/screen/profile/profile.dart';
 import 'package:commerce/presentation/ui/widgets/app_bar_icons.dart';
 import 'package:commerce/presentation/ui/widgets/categories_card.dart';
 import 'package:commerce/presentation/ui/widgets/home_screen_widgets/home_screen_search_bar.dart';
@@ -16,7 +16,6 @@ import 'package:commerce/presentation/ui/widgets/shimmer_in_progress/shimmer_pop
 import 'package:commerce/presentation/ui/widgets/shimmer_in_progress/shimmer_progress.dart';
 import 'package:commerce/presentation/ui/widgets/title_header_and_see_all_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -27,6 +26,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _homecontrol = Get.put(HomeController());
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      _homecontrol.fetchUserData();
+      _homecontrol.fetchProducts();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,20 +104,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               }),
               specialItemListView,
-              GetBuilder<NewProductsController>(builder: (newController) {
-                return TitleHeaderAndSeeAllButton(
-                  title: "New",
-                  onTap: () {
-                    Get.to(
-                      ItemsScreen(
-                        title: 'New',
-                        products: newController.productModel,
-                      ),
-                    );
-                  },
-                );
-              }),
-              newItemListView,
+              // GetBuilder<NewProductsController>(builder: (newController) {
+              //   return TitleHeaderAndSeeAllButton(
+              //     title: "New",
+              //     onTap: () {
+              //       Get.to(
+              //         ItemsScreen(
+              //           title: 'New',
+              //           products: newController.productModel,
+              //         ),
+              //       );
+              //     },
+              //   );
+              // }),
+              // newItemListView,
             ],
           ),
         ),
@@ -116,36 +125,36 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  SizedBox get newItemListView {
-    return SizedBox(
-      height: 182,
-      child: GetBuilder<NewProductsController>(builder: (newController) {
-        if (newController.getNewInProgress) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        return ListView.builder(
-          addAutomaticKeepAlives: true,
-          scrollDirection: Axis.horizontal,
-          itemCount: newController.productModel.data?.length ?? 0,
-          itemBuilder: (context, index) {
-            return ProductsCard(
-              product: newController.productModel.data![index],
-              isShowDeleteButton: false,
-            );
-          },
-        );
-      }),
-    );
-  }
+  // SizedBox get newItemListView {
+  //   return SizedBox(
+  //     height: 182,
+  //     child: GetBuilder<NewProductsController>(builder: (newController) {
+  //       if (newController.getNewInProgress) {
+  //         return const Center(
+  //           child: CircularProgressIndicator(),
+  //         );
+  //       }
+  //       return ListView.builder(
+  //         addAutomaticKeepAlives: true,
+  //         scrollDirection: Axis.horizontal,
+  //         itemCount: newController.productModel.data?.length ?? 0,
+  //         itemBuilder: (context, index) {
+  //           return ProductsCard(
+  //             product: newController.productModel.data![index],
+  //             isShowDeleteButton: false,
+  //           );
+  //         },
+  //       );
+  //     }),
+  //   );
+  // }
 
   SizedBox get specialItemListView {
     return SizedBox(
       height: 182,
-      child: GetBuilder<SpecialProductsController>(
-        builder: (specialController) {
-          if (specialController.getSpecialProductsInProgress) {
+      child: GetBuilder<HomeController>(
+        builder: (ctr) {
+          if (ctr.products.isEmpty) {
             return const Center(
               child: CircularProgressIndicator(),
             );
@@ -153,10 +162,10 @@ class _HomeScreenState extends State<HomeScreen> {
           return ListView.builder(
             addAutomaticKeepAlives: true,
             scrollDirection: Axis.horizontal,
-            itemCount: specialController.productModel.data?.length ?? 0,
+            itemCount: ctr.products.length,
             itemBuilder: (context, index) {
               return ProductsCard(
-                product: specialController.productModel.data![index],
+                product: ctr.products[index],
                 isShowDeleteButton: false,
               );
             },
@@ -169,9 +178,8 @@ class _HomeScreenState extends State<HomeScreen> {
   SizedBox get popularItemsListView {
     return SizedBox(
       height: 182,
-      child: GetBuilder<PopularProductsController>(
-          builder: (popularProductsController) {
-        if (popularProductsController.getPopularProductsInProgress) {
+      child: GetBuilder<HomeController>(builder: (ctr) {
+        if (ctr.products.isEmpty) {
           return const Row(
             children: [
               ShimmerPopular(
@@ -187,10 +195,10 @@ class _HomeScreenState extends State<HomeScreen> {
         }
         return ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: popularProductsController.productModel.data?.length ?? 0,
+          itemCount: ctr.products.length ?? 0,
           itemBuilder: (context, index) {
             return ProductsCard(
-              product: popularProductsController.productModel.data![index],
+              product: ctr.products[index],
               isShowDeleteButton: false,
             );
           },
@@ -217,32 +225,35 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   AppBar get homeScreenAppBar {
+    final _homecontrol = Get.put(HomeController());
+
     return AppBar(
       backgroundColor: Colors.white,
       elevation: 0,
       title: Row(
         children: [
-          SvgPicture.asset(ImagesUtils.craftyBayNavBarLogoSVG),
+          // SvgPicture.asset(ImagesUtils.craftyBayNavBarLogoSVG),
+          GetBuilder<HomeController>(builder: (c) {
+            return Text(
+              _homecontrol.isLoggedin()
+                  ? "Welcome ${_homecontrol.firstname}"
+                  : "",
+              style: const TextStyle(fontSize: 16),
+            );
+          }),
+
           const Spacer(),
           AppBarIcons(
+            //EmailVerificationScreen
             icon: Icons.person_outline,
             onTap: () {
-              Get.to(() => const EmailVerificationScreen());
+              _homecontrol.isLoggedin()
+                  ? Get.to(() => const MyProfile())
+                  : Get.to(() => const Login());
             },
           ),
           const SizedBox(
             width: 12,
-          ),
-          AppBarIcons(
-            icon: Icons.phone_outlined,
-            onTap: () {},
-          ),
-          const SizedBox(
-            width: 12,
-          ),
-          AppBarIcons(
-            icon: Icons.notifications_active_outlined,
-            onTap: () {},
           ),
         ],
       ),

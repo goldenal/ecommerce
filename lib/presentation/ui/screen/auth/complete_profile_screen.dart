@@ -1,5 +1,4 @@
 import 'package:commerce/presentation/state_holders/authentication_controller/complete_profile_controller.dart';
-import 'package:commerce/presentation/ui/screen/main_bottom_nav_screen.dart';
 import 'package:commerce/presentation/ui/utils/images_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -91,9 +90,9 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                   ),
                   TextFormField(
                     validator: (value) {
-                      if (value!.isEmpty ||
-                          !RegExp(r'^[0-9]{11}$') /*this is another regex validation for number (r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$')*/
-                              .hasMatch(value)) {
+                      if (value!
+                          .isEmpty) /*this is another regex validation for number (r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$')*/
+                      {
                         return "please Enter your correct phone Number";
                       } else {
                         return null;
@@ -132,21 +131,20 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                         );
                       }
                       return ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           /*_firstNameTEController.clear();
                             _lastNameTEController.clear();
                             _cityTEController.clear();
                             _mobileTEController.clear();
                             _shippingAddressTEController.clear();*/
-                          controller.getCompleteProfile(
-                              _firstNameTEController.text.trim(),
-                              _lastNameTEController.text.trim(),
-                              _mobileTEController.text.trim(),
-                              _cityTEController.text,
-                              _shippingAddressTEController.text.trim());
+
                           if (_formKey.currentState!.validate()) {
-                            // OTPVerifyLoginController().setProfile;
-                            Get.offAll(() => const BottomNavBarScreen());
+                            await controller.getCompleteProfile(
+                                _firstNameTEController.text.trim(),
+                                _lastNameTEController.text.trim(),
+                                _mobileTEController.text.trim(),
+                                _cityTEController.text,
+                                _shippingAddressTEController.text.trim());
                           }
                         },
                         child: const Text("Complete"),
