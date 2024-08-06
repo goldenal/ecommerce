@@ -29,7 +29,7 @@ class _ProductsDetailsScreenState extends State<ProductsDetailsScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Get.find<ProductsDetailsController>()
       //     .getProductsDetails(widget.productsId);
-      Get.find<ProductsDetailsController>().availableColor.clear();
+      // Get.find<ProductsDetailsController>().availableColor.clear();
     });
   }
 

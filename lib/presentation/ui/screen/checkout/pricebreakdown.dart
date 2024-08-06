@@ -15,18 +15,19 @@ class PriceBreakdown extends StatelessWidget {
     return Row(
       children: [
         Text(
-          title??"",
-          style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                color: Color(0xFF8A8A8E),
-              ),
+          title ?? "",
+          style: Theme.of(context)
+              .textTheme
+              .headlineMedium!
+              .copyWith(color: Color(0xFF8A8A8E), fontSize: 16),
         ),
         Spacer(),
         Text(
-          price??"",
+          price ?? "",
           style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                color: Color(0xFF22292E),
-                fontWeight: FontWeight.w700,
-              ),
+              color: Color(0xFF22292E),
+              fontWeight: FontWeight.w700,
+              fontSize: 16),
         ),
       ],
     );

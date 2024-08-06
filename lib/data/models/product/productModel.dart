@@ -18,17 +18,18 @@ class NewProduct {
   String? id;
   String? category;
   String? stock;
+  bool split;
 
-  NewProduct({
-    this.images,
-    this.ratings,
-    this.price,
-    this.name,
-    this.description,
-    this.id,
-    this.category,
-    this.stock,
-  });
+  NewProduct(
+      {this.images,
+      this.ratings,
+      this.price,
+      this.name,
+      this.description,
+      this.id,
+      this.category,
+      this.stock,
+      this.split = false});
 
   factory NewProduct.fromJson(Map<String, dynamic> json) => NewProduct(
         images: json["images"] == null
@@ -42,6 +43,7 @@ class NewProduct {
         id: json["id"],
         category: json["category"],
         stock: json["stock"],
+        split: json["split"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -54,6 +56,7 @@ class NewProduct {
         "id": id,
         "category": category,
         "stock": stock,
+        "split": split
       };
 }
 

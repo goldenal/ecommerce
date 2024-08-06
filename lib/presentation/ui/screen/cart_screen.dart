@@ -1,6 +1,6 @@
 import 'package:commerce/data/models/cart_list_model.dart';
 import 'package:commerce/presentation/state_holders/cart_list_controller.dart';
-import 'package:commerce/presentation/ui/screen/profile/checkout/checkout.dart';
+import 'package:commerce/presentation/ui/screen/checkout/checkout.dart';
 import 'package:commerce/presentation/ui/utils/app_color.dart';
 import 'package:commerce/presentation/ui/widgets/cart_screen_list_tile_card.dart';
 import 'package:commerce/presentation/ui/widgets/custom_app_bar.dart';
