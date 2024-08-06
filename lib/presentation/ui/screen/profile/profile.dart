@@ -55,6 +55,10 @@ class _MyProfileState extends State<MyProfile> {
               title: _homecontrol.address,
               icon: Icons.location_on,
             ),
+            const SettingsItem(
+              title: "Orders",
+              icon: Icons.takeout_dining,
+            ),
             const SizedBox(
               height: 20,
             ),
@@ -68,8 +72,8 @@ class _MyProfileState extends State<MyProfile> {
             ),
             GestureDetector(
               onTap: () async {
-                launch(
-                    "https://tawk.to/chat/61ebeb499bd1f31184d8b9a7/1fq1o5bdo");
+                launchUrl(Uri.parse(
+                    'https://tawk.to/chat/61ebeb499bd1f31184d8b9a7/1fq1o5bdo'));
               },
               child: const SettingsItem(
                 title: 'Live chat',

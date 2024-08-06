@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:commerce/data/models/product/productModel.dart';
 import 'package:commerce/data/models/products_details.dart';
 import 'package:commerce/presentation/state_holders/add_to_cart_controller.dart';
@@ -123,7 +121,7 @@ class _ProductsDetailsScreenState extends State<ProductsDetailsScreen> {
               onPressed: () {
                 Get.to(
                   () => ReviewsScreen(
-                    productsId: productsDetails.productId ?? 0,
+                    product: widget.product,
                   ),
                 );
               },
@@ -278,14 +276,12 @@ class _ProductsDetailsScreenState extends State<ProductsDetailsScreen> {
                   }
                   return ElevatedButton(
                     onPressed: () async {
-                      final results = await addToCartController.addToCart(
-                          productsDetails.id!,
-                          color[_selectedColorIndex].toString(),
-                          size[_selectedSizeIndex].toString());
+                      final results = await addToCartController
+                          .addToCart(widget.product);
 
+                      // addToCartController.addMoreItems();
                       if (results) {
                         Get.snackbar("Success", "Added to cart ");
-                      
                       }
                       //else if (AuthController.accessToken!.isEmpty) {
                       //   Get.defaultDialog(

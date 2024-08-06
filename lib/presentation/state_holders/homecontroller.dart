@@ -12,6 +12,7 @@ class HomeController extends GetxController {
   String firstname = "", lastName = "", phone = "", email = "", address = "";
   List<NewProduct> products = [];
   bool get getProductsInProgress => _getProductsInProgress;
+  
   isLoggedin() {
     final user = _auth.currentUser;
     if (user != null) {
@@ -39,6 +40,7 @@ class HomeController extends GetxController {
         },
         onError: (e) => print("Error getting document: $e"),
       );
+    
     }
   }
 

@@ -1,23 +1,23 @@
 import 'dart:async';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:device_preview/device_preview.dart';
 import 'package:commerce/application/state_holders_bindings.dart';
 import 'package:commerce/presentation/ui/screen/splash_screen.dart';
 import 'package:commerce/presentation/ui/utils/app_color.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class CraftyBay extends StatefulWidget {
+class Commerce extends StatefulWidget {
   static GlobalKey<NavigatorState> globalKey = GlobalKey<NavigatorState>();
 
-  const CraftyBay({super.key});
+  const Commerce({super.key});
 
   @override
-  State<CraftyBay> createState() => _CraftyBayState();
+  State<Commerce> createState() => _CommerceState();
 }
 
-class _CraftyBayState extends State<CraftyBay> {
+class _CommerceState extends State<Commerce> {
   late final StreamSubscription _connectivityStream;
 
   @override
@@ -52,13 +52,13 @@ class _CraftyBayState extends State<CraftyBay> {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      navigatorKey: CraftyBay.globalKey,
+      navigatorKey: Commerce.globalKey,
       useInheritedMediaQuery: true, //for devices preview
       locale: DevicePreview.locale(context), //for devices preview
       builder: DevicePreview.appBuilder, //for devices preview
       initialBinding: StateHoldersBindings(),
       debugShowCheckedModeBanner: false,
-      title: "Crafty-Bay",
+      title: "commerce",
       home: const SplashScreen(),
       theme: ThemeData(
         primarySwatch:

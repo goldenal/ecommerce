@@ -1,3 +1,4 @@
+import 'package:commerce/data/models/product/productModel.dart';
 import 'package:commerce/data/models/review_list_model.dart';
 import 'package:commerce/presentation/state_holders/review_list_controller.dart';
 import 'package:commerce/presentation/ui/screen/create_review_screen.dart';
@@ -7,9 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ReviewsScreen extends StatefulWidget {
-  final int productsId;
+  final NewProduct product;
 
-  const ReviewsScreen({super.key, required this.productsId});
+  const ReviewsScreen({super.key, required this.product});
 
   @override
   State<ReviewsScreen> createState() => _ReviewsScreenState();
@@ -18,9 +19,7 @@ class ReviewsScreen extends StatefulWidget {
 class _ReviewsScreenState extends State<ReviewsScreen> {
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Get.find<ReviewListController>().getReview(widget.productsId);
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {});
     super.initState();
   }
 
@@ -29,20 +28,16 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
     return Scaffold(
       appBar: customAppBar("Reviews", true),
       body: GetBuilder<ReviewListController>(builder: (reviewController) {
-        if (reviewController.getReviewListInProgress) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
         return Column(
           children: [
             Expanded(
               child: SizedBox(
                 height: 200,
                 child: ListView.builder(
-                  itemCount: reviewController.reviewData.data?.length ?? 0,
+                  itemCount: widget.product.ratings?.reviews?.length,
                   itemBuilder: (context, int index) {
-                    return reviewCard(reviewController.reviewData.data![index]);
+                    return reviewCard(
+                        widget.product.ratings?.reviews![index] ?? Review());
                   },
                 ),
               ),
@@ -74,7 +69,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "Reviews (${model.data?.length ?? 0})",
+              "Reviews (${widget.product.ratings?.reviews?.length ?? 0})",
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
@@ -85,7 +80,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
               onPressed: () {
                 Get.to(
                   () => CreateReviewScreen(
-                    productsId: widget.productsId,
+                    product: widget.product,
                   ),
                 );
               },
@@ -97,7 +92,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
     );
   }
 
-  Card reviewCard(ReviewData data) {
+  Card reviewCard(Review data) {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -119,7 +114,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                 ),
                 Expanded(
                   child: Text(
-                    data.profile?.firstName ?? "",
+                    data.fullname ?? "",
                     style: const TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 18,
@@ -132,7 +127,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
               height: 8,
             ),
             Text(
-              data.description ??
+              data.comment ??
                   "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
               style: const TextStyle(
                 fontSize: 12,

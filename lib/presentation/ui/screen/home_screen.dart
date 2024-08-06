@@ -82,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Get.to(
                       ItemsScreen(
                         title: 'Popular',
-                        products: controller.productModel,
+                        newp: _homecontrol.products,
                       ),
                     );
                   },
@@ -97,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Get.to(
                       ItemsScreen(
                         title: 'Special',
-                        products: specialController.productModel,
+                        newp: _homecontrol.products,
                       ),
                     );
                   },
@@ -165,7 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
             itemCount: ctr.products.length,
             itemBuilder: (context, index) {
               return ProductsCard(
-                product: ctr.products[index],
+                product: ctr.products.reversed.toList()[index],
                 isShowDeleteButton: false,
               );
             },

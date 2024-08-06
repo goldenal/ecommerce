@@ -1,6 +1,6 @@
-import 'package:commerce/data/models/network_response.dart';
-import 'package:commerce/data/services/network_caller.dart';
-import 'package:commerce/data/utils/url_links.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:commerce/data/models/product/productModel.dart';
+import 'package:commerce/presentation/state_holders/homecontroller.dart';
 import 'package:get/get.dart';
 
 class CreateReviewController extends GetxController {
@@ -9,21 +9,37 @@ class CreateReviewController extends GetxController {
 
   bool get createReviewInProgress => _createReviewInProgress;
   String get message => _message;
+  final _homecontrol = Get.put(HomeController());
 
-  Future<bool> createReview(String description, int product_id) async {
+  Future<void> addReview(NewProduct pd, comment) async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
     _createReviewInProgress = true;
     update();
-    final NetworkResponse response = await NetworkCaller.postRequest(
-        Urls.createReview,
-        {"description": description, "product_id": product_id});
+    try {
+      QuerySnapshot querySnapshot = await firestore
+          .collection('products')
+          .where('id', isEqualTo: pd.id)
+          .get();
+      Review newreview = Review(
+          comment: comment,
+          fullname: "${_homecontrol.firstname} ${_homecontrol.lastName}",
+          rating: "5",
+          userId: "");
+      pd.ratings?.reviews?.add(newreview);
 
-    _createReviewInProgress = false;
-    update();
-    if (response.isSuccess && response.statusCode == 200) {
-      return true;
-    } else {
-      _message = "profile update failed!";
-      return false;
+      for (QueryDocumentSnapshot document in querySnapshot.docs) {
+        await document.reference.update({'ratings': pd.ratings?.toJson()});
+      }
+      _homecontrol.fetchProducts();
+      _createReviewInProgress = false;
+      update();
+      Get.back();
+      Get.back();
+      Get.snackbar('done', "review added done");
+    } catch (e) {
+      _createReviewInProgress = false;
+      update();
+      // TODO
     }
   }
 }

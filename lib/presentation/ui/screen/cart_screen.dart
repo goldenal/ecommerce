@@ -41,14 +41,12 @@ class _CartScreenState extends State<CartScreen> {
                 Expanded(
                   child: ListView.builder(
                     shrinkWrap: true,
-                    itemCount:
-                        cartListController.cartListModel.data?.length ?? 0,
+                    itemCount: cartListController.cart.length ?? 0,
                     itemBuilder: (context, int index) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: CartListTileCard(
-                          cartData:
-                              cartListController.cartListModel.data![index],
+                          cartData: cartListController.cart[index],
                         ),
                       );
                     },
@@ -56,7 +54,7 @@ class _CartScreenState extends State<CartScreen> {
                 ),
                 Container(
                   clipBehavior: Clip.hardEdge,
-                  height: 100,
+                  height: 106,
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.only(
