@@ -73,7 +73,7 @@ class Checkoutcontroller extends GetxController {
       "Split": isSplit,
       "time": DateTime.now().toString(),
       "data": cartctr.cart[0].toJson()
-    };
+    }; //
     db
         .collection("orders")
         .doc(ref)
