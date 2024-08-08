@@ -97,7 +97,7 @@ class Checkoutcontroller extends GetxController {
         .doc(ref)
         .set(data, SetOptions(merge: true))
         .then((documentSnapshot) {
-      Get.offAll(() => const BottomNavBarScreen());
+      Get.offAll(() => const BottomNavBarScreen()); //
     });
   }
 }
