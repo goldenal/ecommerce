@@ -33,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Future.delayed(Duration.zero, () {
       _homecontrol.fetchUserData();
       _homecontrol.fetchProducts();
+      _homecontrol.fetchOrders();
     });
   }
 

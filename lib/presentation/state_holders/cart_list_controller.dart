@@ -102,32 +102,24 @@ class CartListController extends GetxController {
     // }
   }
 
-  emtyCart(){
-     String docuId = "";
+  emtyCart() {
+    String docuId = "";
     final user = _auth.currentUser;
 
-    db
-        .collection("cart")
-        .where("uid", isEqualTo: user!.uid)
-        .get()
-        .then(
+    db.collection("cart").where("uid", isEqualTo: user!.uid).get().then(
       (doc) {
         for (var docSnapshot in doc.docs) {
           log('${docSnapshot.id} => ${docSnapshot.data()}');
           docuId = docSnapshot.id;
           db.collection("cart").doc(docuId).delete().then(
-          (doc) {
-            Get.snackbar("success", "products deleted successfully");
-            getCartList();
-          },
-          onError: (e) => print("Error updating document $e"),
-        );
+            (doc) {
+              getCartList();
+            },
+            onError: (e) => print("Error updating document $e"),
+          );
         }
-        
       },
       onError: (e) => print("Error updating document $e"),
     );
-
-
   }
 }

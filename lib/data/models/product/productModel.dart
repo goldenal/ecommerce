@@ -43,7 +43,7 @@ class NewProduct {
         id: json["id"],
         category: json["category"],
         stock: json["stock"],
-        split: json["split"],
+        split: json["split"]??false,
       );
 
   Map<String, dynamic> toJson() => {

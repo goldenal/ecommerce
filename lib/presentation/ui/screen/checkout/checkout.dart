@@ -1,6 +1,8 @@
 import 'package:commerce/presentation/state_holders/cart_list_controller.dart';
 import 'package:commerce/presentation/state_holders/checkoutController.dart';
+import 'package:commerce/presentation/state_holders/homecontroller.dart';
 import 'package:commerce/presentation/ui/screen/checkout/pricebreakdown.dart';
+import 'package:commerce/presentation/ui/screen/successfulorder.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -48,8 +50,7 @@ class CheckoutScreen extends StatelessWidget {
                         ),
                         const PaymentCard(title: 'Bank'),
                         const PaymentCard(title: 'USSD'),
-                        const PaymentCard(title: 'Opay'),
-                        const PaymentCard(title: 'Transfer'),
+
                         const Divider(
                           height: 56,
                         ),
@@ -75,22 +76,28 @@ class CheckoutScreen extends StatelessWidget {
                 ],
               ),
             ),
-        if(cart.cart.length == 1 && cart.cart[0].split==true)     ElevatedButton(
-              onPressed: () {
-                checkCtrl.pay((cart.totalPrice + 500)/2);
-                // Navigator.of(context).pushNamed(OrderSuccessScreen.routeName);
-              },
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 1, horizontal: 40),
-                child: Text('Split with someone '),
+
+            if (cart.cart.length == 1 && cart.cart[0].split == true)
+              ElevatedButton(
+                onPressed: () {
+                  checkCtrl.pay((cart.totalPrice / 2) + 500).then((_) {
+                    Get.to(() => OrderSuccessScreen());
+                  });
+                  // Navigator.of(context).pushNamed(OrderSuccessScreen.routeName);
+                },
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 1, horizontal: 40),
+                  child: Text('Split with someone '),
+                ),
               ),
-            ),
             const SizedBox(
               height: 10,
             ),
             ElevatedButton(
               onPressed: () {
-                checkCtrl.pay(cart.totalPrice + 500);
+                checkCtrl.pay(cart.totalPrice + 500).then((_) {
+                  Get.to(() => OrderSuccessScreen());
+                });
                 // Navigator.of(context).pushNamed(OrderSuccessScreen.routeName);
               },
               child: const Padding(
@@ -189,6 +196,7 @@ class DestinationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _homecontrol = Get.put(HomeController());
     return Container(
       height: 120,
       width: double.infinity,
@@ -227,7 +235,7 @@ class DestinationCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Planet Namex, 989 Warhammer Street',
+                  '${_homecontrol.address.capitalizeFirst}',
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                         fontSize: 20,
                         color: const Color(0xFF8A8A8E),
@@ -235,7 +243,7 @@ class DestinationCard extends StatelessWidget {
                   softWrap: true,
                 ),
                 Text(
-                  '(+78) 8989 8787',
+                  '${_homecontrol.phone}',
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                         color: const Color(0xFF8A8A8E),
                         fontSize: 20,

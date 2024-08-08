@@ -8,13 +8,15 @@ class SettingsItem extends StatelessWidget {
   final IconData icon;
   final bool isAccount;
   final bool isDark;
-  const SettingsItem({
-    Key? key,
-    required this.title,
-    required this.icon,
-    this.isAccount = false,
-    this.isDark = false,
-  }) : super(key: key);
+  String? txt;
+   SettingsItem(
+      {Key? key,
+      required this.title,
+      required this.icon,
+      this.isAccount = false,
+      this.isDark = false,
+      this.txt})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +27,10 @@ class SettingsItem extends StatelessWidget {
           style: theme.textTheme.displayMedium?.copyWith(
             fontSize: 16,
           )),
-      subtitle: !isAccount
+      subtitle: !isAccount && txt == null
           ? null
           : Text(
-              _homecontrol.phone,
+              txt??"" ,
             ),
       leading: CircleAvatar(
         radius: isAccount ? 20 : 20,
@@ -42,7 +44,7 @@ class SettingsItem extends StatelessWidget {
         width: 35,
         height: 35,
         decoration: BoxDecoration(
-          color: AppColor.primaryColor,
+          color: isAccount ? Colors.white : AppColor.primaryColor,
           borderRadius: BorderRadius.circular(10),
         ),
         child: const Icon(

@@ -1,5 +1,6 @@
 import 'package:commerce/presentation/state_holders/homecontroller.dart';
 import 'package:commerce/presentation/ui/screen/auth/login.dart';
+import 'package:commerce/presentation/ui/screen/profile/orderhistory.dart';
 import 'package:commerce/presentation/ui/screen/profile/screen_title.dart';
 import 'package:commerce/presentation/ui/screen/profile/settings_item.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -42,21 +43,35 @@ class _MyProfileState extends State<MyProfile> {
               title: _homecontrol.firstname + " " + _homecontrol.lastName,
               icon: Icons.person,
               isAccount: true,
+              txt: _homecontrol.phone,
             ),
             SettingsItem(
               title: _homecontrol.email,
               icon: Icons.email,
+              isAccount: true,
             ),
             SettingsItem(
               title: _homecontrol.phone,
               icon: Icons.phone,
+              isAccount: true,
             ),
             SettingsItem(
               title: _homecontrol.address,
               icon: Icons.location_on,
+              isAccount: true,
+              txt: "My address",
             ),
-            const SettingsItem(
-              title: "Orders",
+            GestureDetector(
+              onTap: () {
+                Get.to(() => OrderHistoryPage());
+              },
+              child: SettingsItem(
+                title: "My Orders",
+                icon: Icons.takeout_dining,
+              ),
+            ),
+            SettingsItem(
+              title: "Split Orders",
               icon: Icons.takeout_dining,
             ),
             const SizedBox(
@@ -75,7 +90,7 @@ class _MyProfileState extends State<MyProfile> {
                 launchUrl(Uri.parse(
                     'https://tawk.to/chat/61ebeb499bd1f31184d8b9a7/1fq1o5bdo'));
               },
-              child: const SettingsItem(
+              child: SettingsItem(
                 title: 'Live chat',
                 icon: Icons.live_help,
               ),
@@ -88,7 +103,7 @@ class _MyProfileState extends State<MyProfile> {
                 await FirebaseAuth.instance.signOut();
                 Get.to(() => const Login());
               },
-              child: const SettingsItem(
+              child: SettingsItem(
                 title: 'Sign Out',
                 icon: Icons.logout,
               ),

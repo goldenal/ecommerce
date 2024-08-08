@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:commerce/data/models/product/orders.dart';
 import 'package:commerce/data/models/product/productModel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -12,7 +13,9 @@ class HomeController extends GetxController {
   String firstname = "", lastName = "", phone = "", email = "", address = "";
   List<NewProduct> products = [];
   bool get getProductsInProgress => _getProductsInProgress;
-  
+  List<OrdersModel> allorders = [];
+  NewProduct? orderproducts;
+
   isLoggedin() {
     final user = _auth.currentUser;
     if (user != null) {
@@ -40,7 +43,6 @@ class HomeController extends GetxController {
         },
         onError: (e) => print("Error getting document: $e"),
       );
-    
     }
   }
 
@@ -53,6 +55,24 @@ class HomeController extends GetxController {
           log('${docSnapshot.id} => ${docSnapshot.data()}');
         }
         products = temp;
+      },
+      onError: (e) => print("Error completing: $e"),
+    );
+  }
+
+  fetchOrders() async {
+    db.collection("orders").get().then(
+      (querySnapshot) {
+        List<OrdersModel> temp = [];
+        for (var docSnapshot in querySnapshot.docs) {
+          temp.add(OrdersModel.fromJson(docSnapshot.data()));
+          orderproducts = NewProduct.fromJson(docSnapshot.data()["data"]);
+        }
+        allorders = temp.where((v) {
+          return v.person1Uid == _auth.currentUser!.uid ||
+              v.person2Uid == _auth.currentUser!.uid;
+        }).toList();
+        update();
       },
       onError: (e) => print("Error completing: $e"),
     );

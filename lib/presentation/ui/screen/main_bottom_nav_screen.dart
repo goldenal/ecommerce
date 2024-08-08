@@ -49,6 +49,7 @@ class _BottomNavBarScreenState extends State<BottomNavBarScreen> {
           unselectedItemColor: Colors.grey,
           selectedItemColor: AppColor.primaryColor,
           showSelectedLabels: true,
+          showUnselectedLabels: true,
           type: BottomNavigationBarType.shifting,
           elevation: 4,
           onTap: controller.onChanged,
