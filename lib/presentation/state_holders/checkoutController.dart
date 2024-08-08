@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:commerce/presentation/state_holders/cart_list_controller.dart';
 import 'package:commerce/presentation/state_holders/homecontroller.dart';
+import 'package:commerce/presentation/ui/screen/main_bottom_nav_screen.dart';
+import 'package:commerce/presentation/ui/screen/successfulorder.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,7 +16,8 @@ class Checkoutcontroller extends GetxController {
   final db = FirebaseFirestore.instance;
   final _homecontrol = Get.put(HomeController());
 
-  Future<void> pay(double amount) async {
+  Future<void> pay(double amount, bool split, bool buysplit,
+      {String? ref}) async {
     final uniqueTransRef = PayWithPayStack().generateUuidV4();
 
     await PayWithPayStack().now(
@@ -36,18 +39,23 @@ class Checkoutcontroller extends GetxController {
         amount: amount,
         transactionCompleted: () {
           log("Transaction  Successful!");
-          orderSuccessful(amount, uniqueTransRef);
+          Get.back();
+          if (buysplit) {
+            buysplitSucess(ref);
+          } else {
+            orderSuccessful(amount, uniqueTransRef, split);
+          }
         },
         transactionNotCompleted: () {
           log("Transaction Not Successful!");
         });
   }
 
-  orderSuccessful(
-    amount,
-    ref,
-  ) {
-    bool isSplit = cartctr.cart.length == 1 && cartctr.cart[0].split == true;
+  orderSuccessful(amount, ref, split) {
+    Get.to(() => OrderSuccessScreen());
+
+    bool isSplit =
+        (cartctr.cart.length == 1 && cartctr.cart[0].split == true) && split;
     List<String> items = [];
     for (var cart in cartctr.cart) {
       items.add(cart.name ?? "");
@@ -57,7 +65,7 @@ class Checkoutcontroller extends GetxController {
       "Reference": ref,
       "Amount": amount,
       "Items": items,
-      "Status": "processing",
+      "Status": isSplit ? "Pending" : "processing",
       "Person1": _homecontrol.firstname,
       "Person1uid": _auth.currentUser!.uid,
       "Person2uid": "",
@@ -72,6 +80,24 @@ class Checkoutcontroller extends GetxController {
         .set(data, SetOptions(merge: true))
         .then((documentSnapshot) {
       cartctr.emtyCart();
+    });
+  }
+
+  buysplitSucess(ref) {
+    final data = {
+      "Reference": ref,
+      "Status": "processing",
+      "Person1": _homecontrol.firstname,
+      "Person2uid": _auth.currentUser!.uid,
+      "Fullypaid": true,
+    };
+
+    db
+        .collection("orders")
+        .doc(ref)
+        .set(data, SetOptions(merge: true))
+        .then((documentSnapshot) {
+      Get.offAll(() => const BottomNavBarScreen());
     });
   }
 }

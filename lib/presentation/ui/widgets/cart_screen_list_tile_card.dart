@@ -83,7 +83,7 @@ class CartListTileCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '\$${cartData.price}',
+                        'N${cartData.price}',
                         style: const TextStyle(
                             color: AppColor.primaryColor,
                             fontSize: 18,

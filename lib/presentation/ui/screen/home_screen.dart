@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 }
                 return HomeSlider(
-                  sliders: controller.homeScreenSliderModel.data ?? [],
+                  sliders:  _homecontrol.products,
                 );
               }),
               const SizedBox(
@@ -163,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
           return ListView.builder(
             addAutomaticKeepAlives: true,
             scrollDirection: Axis.horizontal,
-            itemCount: ctr.products.length,
+            itemCount: 4,
             itemBuilder: (context, index) {
               return ProductsCard(
                 product: ctr.products.reversed.toList()[index],
@@ -196,7 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
         }
         return ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: ctr.products.length ?? 0,
+          itemCount: 4,
           itemBuilder: (context, index) {
             return ProductsCard(
               product: ctr.products[index],
@@ -216,8 +216,19 @@ class _HomeScreenState extends State<HomeScreen> {
           itemCount: categoriesController.categoryModel.data?.length ?? 0,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, int index) {
-            return CategoriesCard(
-              categoryData: categoriesController.categoryModel.data![index],
+            return GestureDetector(
+              onTap: () {
+                Get.to(
+                  ItemsScreen(
+                    title:
+                        '${categoriesController.categoryModel.data![index].categoryName}',
+                    newp: _homecontrol.products,
+                  ),
+                );
+              },
+              child: CategoriesCard(
+                categoryData: categoriesController.categoryModel.data![index],
+              ),
             );
           },
         );

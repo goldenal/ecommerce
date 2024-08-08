@@ -81,7 +81,7 @@ class _CartScreenState extends State<CartScreen> {
                               height: 5,
                             ),
                             Text(
-                              "\$ ${cartListController.totalPrice}",
+                              "N${cartListController.totalPrice}",
                               style: const TextStyle(
                                   fontSize: 18,
                                   color: AppColor.primaryColor,

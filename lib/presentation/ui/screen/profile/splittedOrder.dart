@@ -1,23 +1,25 @@
 import 'package:commerce/data/models/product/orders.dart';
+import 'package:commerce/data/models/product/productModel.dart';
+import 'package:commerce/presentation/state_holders/checkoutController.dart';
 import 'package:commerce/presentation/state_holders/homecontroller.dart';
 import 'package:commerce/presentation/ui/screen/products_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class OrderHistoryPage extends StatefulWidget {
-  const OrderHistoryPage({super.key});
+class Splittedorder extends StatefulWidget {
+  const Splittedorder({super.key});
 
   @override
-  State<OrderHistoryPage> createState() => _OrderHistoryPageState();
+  State<Splittedorder> createState() => _OrderHistoryPageState();
 }
 
-class _OrderHistoryPageState extends State<OrderHistoryPage> {
+class _OrderHistoryPageState extends State<Splittedorder> {
   final _homecontrol = Get.put(HomeController());
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      // _homecontrol.fetchOrders();
+      _homecontrol.fetchOrders();
     });
   }
 
@@ -31,7 +33,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
           if (_homecontrol.myyorders.isNotEmpty) {
             return OrderList();
           } else {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
         }));
   }
@@ -42,10 +44,18 @@ class OrderList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: _homecontrol.myyorders.length,
+      itemCount: _homecontrol.splitedorders.length,
       itemBuilder: (context, index) {
-        final order = _homecontrol.myyorders[index];
-        return OrderTile(order: order);
+        final order = _homecontrol.splitedorders[index];
+        return GestureDetector(
+            onTap: () {
+              NewProduct np = NewProduct.fromJson(
+                  _homecontrol.splitedorders[index].data ?? {});
+              Get.to(() => ProductsDetailsScreen(
+                    product: np,
+                  ));
+            },
+            child: OrderTile(order: order));
       },
     );
   }
@@ -58,6 +68,7 @@ class OrderTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final checkCtrl = Get.put(Checkoutcontroller());
     return Card(
       elevation: 3.0,
       margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
@@ -76,8 +87,10 @@ class OrderTile extends StatelessWidget {
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 4.0),
-            //  Text('Quantity: ${order.quantity}'),
+            // const Text(
+            //   'Tap to buy',
+            //   style: const TextStyle(color: Colors.green),
+            // ),
             const SizedBox(height: 4.0),
             Text('Price: N${order.amount}'),
             const SizedBox(height: 4.0),
@@ -86,7 +99,17 @@ class OrderTile extends StatelessWidget {
             Text('Status: ${order.status}'),
           ],
         ),
-        //  trailing: const Icon(Icons.arrow_forward_ios, color: Colors.grey),
+        trailing: GestureDetector(
+          onTap: () {
+            checkCtrl.pay(double.parse(order.amount ?? "0"), true, true,
+                ref: order.reference);
+          },
+          child: const Icon(
+            Icons.shopping_cart_checkout,
+            color: Colors.green,
+            size: 50,
+          ),
+        ),
       ),
     );
   }

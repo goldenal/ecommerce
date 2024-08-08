@@ -80,8 +80,8 @@ class CheckoutScreen extends StatelessWidget {
             if (cart.cart.length == 1 && cart.cart[0].split == true)
               ElevatedButton(
                 onPressed: () {
-                  checkCtrl.pay((cart.totalPrice / 2) + 500).then((_) {
-                    Get.to(() => OrderSuccessScreen());
+                  checkCtrl.pay((cart.totalPrice / 2) + 500,true,false).then((_) {
+                   
                   });
                   // Navigator.of(context).pushNamed(OrderSuccessScreen.routeName);
                 },
@@ -95,8 +95,8 @@ class CheckoutScreen extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                checkCtrl.pay(cart.totalPrice + 500).then((_) {
-                  Get.to(() => OrderSuccessScreen());
+                checkCtrl.pay(cart.totalPrice + 500,false,false).then((_) {
+                 
                 });
                 // Navigator.of(context).pushNamed(OrderSuccessScreen.routeName);
               },

@@ -4,8 +4,6 @@
 
 import 'dart:convert';
 
-import 'package:get/get_connect/http/src/utils/utils.dart';
-
 OrdersModel ordersModelFromJson(String str) =>
     OrdersModel.fromJson(json.decode(str));
 
@@ -22,19 +20,20 @@ class OrdersModel {
   bool? fullypaid;
   String? time;
   bool? split;
+  Map<String, dynamic>? data;
 
-  OrdersModel({
-    this.reference,
-    this.amount,
-    this.items,
-    this.status,
-    this.person1,
-    this.person1Uid,
-    this.person2Uid,
-    this.fullypaid,
-    this.split,
-    this.time
-  });
+  OrdersModel(
+      {this.reference,
+      this.amount,
+      this.items,
+      this.status,
+      this.person1,
+      this.person1Uid,
+      this.person2Uid,
+      this.fullypaid,
+      this.split,
+      this.time,
+      this.data});
 
   factory OrdersModel.fromJson(Map<String, dynamic> json) => OrdersModel(
         reference: json["Reference"],
@@ -49,6 +48,7 @@ class OrdersModel {
         fullypaid: json["Fullypaid"],
         split: json["Split"],
         time: json["time"],
+        data: json["data"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -61,6 +61,6 @@ class OrdersModel {
         "Person2uid": person2Uid,
         "Fullypaid": fullypaid,
         "Split": split,
-        "time":time
+        "time": time
       };
 }

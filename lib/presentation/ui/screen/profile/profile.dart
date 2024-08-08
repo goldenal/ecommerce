@@ -1,8 +1,10 @@
 import 'package:commerce/presentation/state_holders/homecontroller.dart';
 import 'package:commerce/presentation/ui/screen/auth/login.dart';
+import 'package:commerce/presentation/ui/screen/profile/editProfile.dart';
 import 'package:commerce/presentation/ui/screen/profile/orderhistory.dart';
 import 'package:commerce/presentation/ui/screen/profile/screen_title.dart';
 import 'package:commerce/presentation/ui/screen/profile/settings_item.dart';
+import 'package:commerce/presentation/ui/screen/profile/splittedOrder.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -50,29 +52,53 @@ class _MyProfileState extends State<MyProfile> {
               icon: Icons.email,
               isAccount: true,
             ),
-            SettingsItem(
-              title: _homecontrol.phone,
-              icon: Icons.phone,
-              isAccount: true,
-            ),
-            SettingsItem(
-              title: _homecontrol.address,
-              icon: Icons.location_on,
-              isAccount: true,
-              txt: "My address",
-            ),
+            GetBuilder<HomeController>(builder: (c) {
+              return GestureDetector(
+                onTap: () {
+                  Get.to(() => Editprofile())?.then((v) {
+                    _homecontrol.update();
+                  });
+                },
+                child: SettingsItem(
+                  title: "Shipping address",
+                  icon: Icons.location_on,
+                  txt: _homecontrol.address,
+                ),
+              );
+            }),
+            GetBuilder<HomeController>(builder: (c) {
+              return GestureDetector(
+                onTap: () {
+                  Get.to(() => Editprofile())?.then((v) {
+                    _homecontrol.update();
+                  });
+                },
+                child: SettingsItem(
+                  title: "Phone",
+                  icon: Icons.phone,
+                  txt: _homecontrol.phone,
+                ),
+              );
+            }),
             GestureDetector(
               onTap: () {
-                Get.to(() => OrderHistoryPage());
+                Get.to(() => const OrderHistoryPage())?.then((v) {
+                  _homecontrol.update();
+                });
               },
               child: SettingsItem(
                 title: "My Orders",
                 icon: Icons.takeout_dining,
               ),
             ),
-            SettingsItem(
-              title: "Split Orders",
-              icon: Icons.takeout_dining,
+            GestureDetector(
+              onTap: () {
+                Get.to(() => const Splittedorder());
+              },
+              child: SettingsItem(
+                title: "Split Orders",
+                icon: Icons.takeout_dining,
+              ),
             ),
             const SizedBox(
               height: 20,

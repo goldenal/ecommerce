@@ -9,7 +9,7 @@ class SettingsItem extends StatelessWidget {
   final bool isAccount;
   final bool isDark;
   String? txt;
-   SettingsItem(
+  SettingsItem(
       {Key? key,
       required this.title,
       required this.icon,
@@ -21,6 +21,7 @@ class SettingsItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _homecontrol = Get.put(HomeController());
+    _homecontrol.fetchOrders();
     final theme = context.theme;
     return ListTile(
       title: Text(title,
@@ -30,7 +31,7 @@ class SettingsItem extends StatelessWidget {
       subtitle: !isAccount && txt == null
           ? null
           : Text(
-              txt??"" ,
+              txt ?? "",
             ),
       leading: CircleAvatar(
         radius: isAccount ? 20 : 20,

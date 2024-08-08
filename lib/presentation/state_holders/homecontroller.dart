@@ -13,8 +13,10 @@ class HomeController extends GetxController {
   String firstname = "", lastName = "", phone = "", email = "", address = "";
   List<NewProduct> products = [];
   bool get getProductsInProgress => _getProductsInProgress;
-  List<OrdersModel> allorders = [];
-  NewProduct? orderproducts;
+  List<OrdersModel> myyorders = [];
+  List<OrdersModel> splitedorders = [];
+  NewProduct? orderproduct;
+  bool editing = false;
 
   isLoggedin() {
     final user = _auth.currentUser;
@@ -66,15 +68,40 @@ class HomeController extends GetxController {
         List<OrdersModel> temp = [];
         for (var docSnapshot in querySnapshot.docs) {
           temp.add(OrdersModel.fromJson(docSnapshot.data()));
-          orderproducts = NewProduct.fromJson(docSnapshot.data()["data"]);
         }
-        allorders = temp.where((v) {
-          return v.person1Uid == _auth.currentUser!.uid ||
-              v.person2Uid == _auth.currentUser!.uid;
+        myyorders = temp.where((v) {
+          return (v.person1Uid == _auth.currentUser!.uid ||
+                  v.person2Uid == _auth.currentUser!.uid) &&
+              v.fullypaid == true;
+        }).toList();
+        splitedorders = temp.where((v) {
+          return v.fullypaid == false;
         }).toList();
         update();
       },
-      onError: (e) => print("Error completing: $e"),
+      onError: (e) => log("Error completing: $e"),
     );
+  }
+
+  editProfile(phone, address) async {
+    editing = true;
+    update();
+
+    try {
+      await db.collection('users').doc(_auth.currentUser!.uid).set(
+          {'mobile': phone, 'shippingAddress': address},
+          SetOptions(merge: true)); // Merge to avoid overwriting other fields
+      editing = false;
+      await fetchUserData();
+      update();
+      Get.back();
+      return true;
+    } catch (e) {
+      editing = false;
+      update();
+      log('Error updating user information: $e');
+      return false;
+      // Handle error
+    }
   }
 }
