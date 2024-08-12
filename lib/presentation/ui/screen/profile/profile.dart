@@ -100,6 +100,17 @@ class _MyProfileState extends State<MyProfile> {
                 icon: Icons.takeout_dining,
               ),
             ),
+            GestureDetector(
+              onTap: () {
+                Get.to(() => Editprofile())?.then((v) {
+                  _homecontrol.update();
+                });
+              },
+              child: SettingsItem(
+                title: "Edit Profile",
+                icon: Icons.edit,
+              ),
+            ),
             const SizedBox(
               height: 20,
             ),

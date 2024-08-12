@@ -279,21 +279,11 @@ class _ProductsDetailsScreenState extends State<ProductsDetailsScreen> {
                       final results = await addToCartController
                           .addToCart(widget.product);
 
-                      // addToCartController.addMoreItems();
+                      //  addToCartController.addMoreItems();
                       if (results) {
                         Get.snackbar("Success", "Added to cart ");
                       }
-                      //else if (AuthController.accessToken!.isEmpty) {
-                      //   Get.defaultDialog(
-                      //       title: "Login",
-                      //       content: const Text(
-                      //           "To confirm your order, you need to login first"),
-                      //       onCancel: () {
-                      //         Get.back();
-                      //       },
-                      //       onConfirm: () {
-                      //         AuthController.clear();
-                      //       });
+                    
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 8),

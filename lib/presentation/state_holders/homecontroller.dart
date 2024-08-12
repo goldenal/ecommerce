@@ -12,8 +12,10 @@ class HomeController extends GetxController {
   final db = FirebaseFirestore.instance;
   String firstname = "", lastName = "", phone = "", email = "", address = "";
   List<NewProduct> products = [];
+  List<NewProduct> supported_splited_products = [];
   bool get getProductsInProgress => _getProductsInProgress;
   List<OrdersModel> myyorders = [];
+
   List<OrdersModel> splitedorders = [];
   NewProduct? orderproduct;
   bool editing = false;
@@ -57,6 +59,9 @@ class HomeController extends GetxController {
           log('${docSnapshot.id} => ${docSnapshot.data()}');
         }
         products = temp;
+        supported_splited_products = temp.where((v) {
+          return v.split == true;
+        }).toList();
       },
       onError: (e) => print("Error completing: $e"),
     );

@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 }
                 return HomeSlider(
-                  sliders:  _homecontrol.products,
+                  sliders: _homecontrol.products,
                 );
               }),
               const SizedBox(
@@ -105,6 +105,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               }),
               specialItemListView,
+              GetBuilder<SpecialProductsController>(
+                  builder: (specialController) {
+                return TitleHeaderAndSeeAllButton(
+                  title: "Split Orders",
+                  onTap: () {
+                    Get.to(
+                      ItemsScreen(
+                        title: 'Split Orders',
+                        newp: _homecontrol.products,
+                      ),
+                    );
+                  },
+                );
+              }),
+              spiltOrderListView,
               // GetBuilder<NewProductsController>(builder: (newController) {
               //   return TitleHeaderAndSeeAllButton(
               //     title: "New",
@@ -149,6 +164,34 @@ class _HomeScreenState extends State<HomeScreen> {
   //     }),
   //   );
   // }
+
+  SizedBox get spiltOrderListView {
+    return SizedBox(
+      height: 182,
+      child: GetBuilder<HomeController>(
+        builder: (ctr) {
+          if (ctr.products.isEmpty) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return ListView.builder(
+            addAutomaticKeepAlives: true,
+            scrollDirection: Axis.horizontal,
+            itemCount: ctr.supported_splited_products.length < 5
+                ? ctr.supported_splited_products.length
+                : 4,
+            itemBuilder: (context, index) {
+              return ProductsCard(
+                product: ctr.supported_splited_products[index],
+                isShowDeleteButton: false,
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
 
   SizedBox get specialItemListView {
     return SizedBox(

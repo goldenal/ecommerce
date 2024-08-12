@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:commerce/data/models/product/productModel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:pay_with_paystack/pay_with_paystack.dart';
 
 class AddToCartController extends GetxController {
   bool _addToCartInProgress = false;
@@ -43,17 +46,23 @@ class AddToCartController extends GetxController {
   }
 
   addMoreItems() {
+    final uniqueTransRef = PayWithPayStack().generateUuidV4();
     NewProduct np = NewProduct(
-      category: "Food",
+      category: "Electronics",
       stock: "10",
-      description: "Bag of rice",
-      id: "jjfjdkk23",
+      description: "Bag of ",
+      id: uniqueTransRef,
       images: [""],
-      name: "Bag of rice",
-      price: "100",
+      name: "new item",
+      price: generateRandomPrice.toString(),
       ratings: Ratings(average: "3.0", reviews: []),
     );
     db.collection("products").add(np.toJson()).then((documentSnapshot) =>
         print("Added Data with ID: ${documentSnapshot.id}"));
+  }
+
+  int generateRandomPrice({int minPrice = 0, int maxPrice = 1000}) {
+    final random = Random();
+    return minPrice + random.nextInt(maxPrice - minPrice + 1);
   }
 }
