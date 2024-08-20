@@ -39,10 +39,16 @@ class Checkoutcontroller extends GetxController {
         amount: amount,
         transactionCompleted: () {
           log("Transaction  Successful!");
+
           Get.back();
+          Future.delayed(Duration.zero, () {
+            Get.to(() => OrderSuccessScreen());
+          });
           if (buysplit) {
+            log("Transaction  1!");
             buysplitSucess(ref);
           } else {
+            log("Transaction  2!");
             orderSuccessful(amount, uniqueTransRef, split);
           }
         },
@@ -52,8 +58,6 @@ class Checkoutcontroller extends GetxController {
   }
 
   orderSuccessful(amount, ref, split) {
-    Get.to(() => OrderSuccessScreen());
-
     bool isSplit =
         (cartctr.cart.length == 1 && cartctr.cart[0].split == true) && split;
     List<String> items = [];

@@ -6,6 +6,7 @@ import 'package:commerce/presentation/ui/utils/app_color.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class Commerce extends StatefulWidget {
@@ -51,6 +52,12 @@ class _CommerceState extends State<Commerce> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(
+      context,
+      designSize: const Size(414, 896),
+      minTextAdapt: true,
+      // orientation: Orientation.portrait
+    );
     return GetMaterialApp(
       navigatorKey: Commerce.globalKey,
       useInheritedMediaQuery: true, //for devices preview

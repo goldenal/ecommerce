@@ -48,21 +48,22 @@ class AddToCartController extends GetxController {
   addMoreItems() {
     final uniqueTransRef = PayWithPayStack().generateUuidV4();
     NewProduct np = NewProduct(
-      category: "Electronics",
+      category: "Furniture",
       stock: "10",
       description: "Bag of ",
       id: uniqueTransRef,
       images: [""],
       name: "new item",
-      price: generateRandomPrice.toString(),
+      price: generateRandomPrice(),
       ratings: Ratings(average: "3.0", reviews: []),
     );
     db.collection("products").add(np.toJson()).then((documentSnapshot) =>
         print("Added Data with ID: ${documentSnapshot.id}"));
   }
 
-  int generateRandomPrice({int minPrice = 0, int maxPrice = 1000}) {
+  generateRandomPrice({int minPrice = 0, int maxPrice = 1000}) {
     final random = Random();
-    return minPrice + random.nextInt(maxPrice - minPrice + 1);
+    int val = minPrice + random.nextInt(maxPrice - minPrice + 1);
+    return val.toString();
   }
 }

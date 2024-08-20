@@ -113,13 +113,61 @@ class _HomeScreenState extends State<HomeScreen> {
                     Get.to(
                       ItemsScreen(
                         title: 'Split Orders',
-                        newp: _homecontrol.products,
+                        newp: _homecontrol.supported_splited_products,
                       ),
                     );
                   },
                 );
               }),
               spiltOrderListView,
+              GetBuilder<SpecialProductsController>(
+                  builder: (specialController) {
+                return TitleHeaderAndSeeAllButton(
+                  title: "Others",
+                  onTap: () {
+                    Get.to(
+                      ItemsScreen(
+                        title: 'Others',
+                        newp: _homecontrol.products,
+                      ),
+                    );
+                  },
+                );
+              }),
+              Wrap(
+                children: [
+                  ..._homecontrol.products.map((v) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: ProductsCard(
+                        product: v,
+                        isShowDeleteButton: false,
+                      ),
+                    );
+                  })
+                ],
+              )
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 8),
+              //   child: GridView.builder(
+              //     itemCount: _homecontrol.products.length ?? 0,
+              //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              //       crossAxisCount: 3,
+              //       crossAxisSpacing: 8,
+              //       mainAxisSpacing: 8,
+              //       childAspectRatio: 0.7,
+              //     ),
+              //     itemBuilder: (context, int index) {
+              //       return FittedBox(
+              //         child: ProductsCard(
+              //           product: _homecontrol.products[index],
+              //           isShowDeleteButton: false,
+              //         ),
+              //       );
+              //     },
+              //   ),
+              // ),
+
               // GetBuilder<NewProductsController>(builder: (newController) {
               //   return TitleHeaderAndSeeAllButton(
               //     title: "New",

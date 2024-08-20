@@ -3,6 +3,7 @@ import 'package:commerce/presentation/state_holders/create_wish_list.dart';
 import 'package:commerce/presentation/ui/screen/products_details_screen.dart';
 import 'package:commerce/presentation/ui/utils/app_color.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class ProductsCard extends StatelessWidget {
@@ -28,7 +29,7 @@ class ProductsCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
         ),
         child: SizedBox(
-          width: 150,
+          width: 150.w,
           child: Column(
             children: [
               Container(
@@ -55,7 +56,7 @@ class ProductsCard extends StatelessWidget {
                 // ),
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(8.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

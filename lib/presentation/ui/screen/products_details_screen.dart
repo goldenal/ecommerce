@@ -276,14 +276,14 @@ class _ProductsDetailsScreenState extends State<ProductsDetailsScreen> {
                   }
                   return ElevatedButton(
                     onPressed: () async {
-                      final results = await addToCartController
-                          .addToCart(widget.product);
+                      final results =
+                          await addToCartController.addToCart(widget.product);
 
-                      //  addToCartController.addMoreItems();
                       if (results) {
                         Get.snackbar("Success", "Added to cart ");
                       }
-                    
+
+                      // addToCartController.addMoreItems();
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 8),

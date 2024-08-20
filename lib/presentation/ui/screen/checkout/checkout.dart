@@ -2,7 +2,6 @@ import 'package:commerce/presentation/state_holders/cart_list_controller.dart';
 import 'package:commerce/presentation/state_holders/checkoutController.dart';
 import 'package:commerce/presentation/state_holders/homecontroller.dart';
 import 'package:commerce/presentation/ui/screen/checkout/pricebreakdown.dart';
-import 'package:commerce/presentation/ui/screen/successfulorder.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -41,19 +40,19 @@ class CheckoutScreen extends StatelessWidget {
                         const Divider(
                           height: 48,
                         ),
-                        const Text(
-                          'Our supported payment method',
-                        ),
-                        const PaymentCard(
-                          //  isSelected: true,
-                          title: 'Card',
-                        ),
-                        const PaymentCard(title: 'Bank'),
-                        const PaymentCard(title: 'USSD'),
+                        // const Text(
+                        //   'Our supported payment method',
+                        // ),
+                        // const PaymentCard(
+                        //   //  isSelected: true,
+                        //   title: 'Card',
+                        // ),
+                        // const PaymentCard(title: 'Bank'),
+                        // const PaymentCard(title: 'USSD'),
 
-                        const Divider(
-                          height: 56,
-                        ),
+                        // const Divider(
+                        //   height: 56,
+                        // ),
                         PriceBreakdown(
                           title: 'Sub total Price',
                           price: 'N${cart.totalPrice}',
@@ -80,9 +79,9 @@ class CheckoutScreen extends StatelessWidget {
             if (cart.cart.length == 1 && cart.cart[0].split == true)
               ElevatedButton(
                 onPressed: () {
-                  checkCtrl.pay((cart.totalPrice / 2) + 500,true,false).then((_) {
-                   
-                  });
+                  checkCtrl
+                      .pay((cart.totalPrice / 2) + 500, true, false)
+                      .then((_) {});
                   // Navigator.of(context).pushNamed(OrderSuccessScreen.routeName);
                 },
                 child: const Padding(
@@ -95,9 +94,7 @@ class CheckoutScreen extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                checkCtrl.pay(cart.totalPrice + 500,false,false).then((_) {
-                 
-                });
+                checkCtrl.pay(cart.totalPrice + 500, false, false).then((_) {});
                 // Navigator.of(context).pushNamed(OrderSuccessScreen.routeName);
               },
               child: const Padding(
